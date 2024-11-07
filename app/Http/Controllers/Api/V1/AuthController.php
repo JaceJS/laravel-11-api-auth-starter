@@ -197,7 +197,7 @@ class AuthController extends Controller
         }
     }
 
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetPasswordLink(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',

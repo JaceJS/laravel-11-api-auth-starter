@@ -12,7 +12,7 @@ Route::prefix('v1')->group(function () {
         ->name('verification.verify');
 
     Route::middleware(['guest'])->group(function () {
-        Route::post('/password/forgot', [AuthController::class, 'sendResetLinkEmail'])->name('password.forgot');
+        Route::post('/password/forgot', [AuthController::class, 'sendResetPasswordLink'])->name('password.forgot');
         Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
     });
 

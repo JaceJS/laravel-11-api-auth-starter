@@ -1,66 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel 11 API Auth Starter
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Welcome to the Laravel 11 API Auth Starter template! This project provides a solid foundation for building API backends with Laravel 11. It comes pre-configured with authentication using Laravel Passport, local development tools with Laravel Sail, and debugging capabilities through Laravel Telescope.
 
-## About Laravel
+## Authentication Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This starter template includes a comprehensive authentication system with the following capabilities:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Register
+-   Login
+-   Verify Email
+-   Resend Email Verification
+-   Send Reset Password Link
+-   Reset Password
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Getting Started
 
-## Learning Laravel
+### 1. Clone the Repository
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Install Dependencies via Composer
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Setup the Environment Variables
 
-## Laravel Sponsors
+Copy the `.env.example` file to create a new `.env` file:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+Then, configure the database connection in the `.env` file. Make sure the `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` are set up correctly.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+If you need to change the database setup later, it's essential to first bring down the containers and remove the volumes with the following command:
 
-## Contributing
+```bash
+./vendor/bin/sail down -v
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+After that, modify the `.env` file with the correct database credentials.
 
-## Code of Conduct
+### 5. Start the Sail Containers
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+After configuring the `.env` file, you can start the application with Laravel Sail:
 
-## Security Vulnerabilities
+```bash
+./vendor/bin/sail up -d
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 6. Generate Application Key
 
-## License
+```bash
+./vendor/bin/sail artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 7. Migrating the Database
+
+Run the migrations to set up the database structure:
+
+```bash
+./vendor/bin/sail artisan migrate
+```
+
+### 8. Setup Laravel Passport
+
+Laravel Passport requires you to create encryption keys for API authentication. Run the following commands to generate the keys and create a personal access client:
+
+```bash
+./vendor/bin/sail artisan passport:keys
+```
+
+```bash
+./vendor/bin/sail artisan passport:client --personal
+```
+
+When you run the `passport:client --personal` command, it will output a `client_id` and a `client_secret`. You need to copy those values and add them to your `.env` file as follows:
+
+```bash
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=<your_client_id_here>
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=<your_client_secret_here>
+```
+
+For example:
+
+```bash
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=9d5a22a6-89a6-4b6b-9ffd-6f305183a954
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=eDLszP4aksy7IUvRf27Y516wSk9sVusuKEK8zQtN
+```
+
+## Debugging with Laravel Telescope
+
+Laravel Telescope is a debugging tool that provides insights into your application's requests, exceptions, database queries, and more. You can access Telescope by visiting:
+
+```bash
+http://localhost/telescope
+```
